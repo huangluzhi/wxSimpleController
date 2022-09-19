@@ -48,8 +48,6 @@ Page({
     //console.log("接触坐标：(" + touchX + "," + touchY + ")");
     // console.log("图片坐标：("+movePos.posX + "," + movePos.posY+")");
     
-    console.log('posx') 
-    console.log(movePos.posX)
     self.setData({
       // leftLooks: movePos.posX,
       // topLooks: movePos.posY
@@ -111,7 +109,6 @@ Page({
 
   //获取角度
   GetAngle: function (DValue_Y, Dvalue_X) {
-    // console.log(DValue_Y)
     var self = this;
     if (DValue_Y != 0) {
       var angleTan = Dvalue_X / DValue_Y;
