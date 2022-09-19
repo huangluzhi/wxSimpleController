@@ -1,0 +1,23 @@
+.relative {
+}
+.pic_background {
+  position: absolute;
+  left: 0; 
+  top: 0; 
+  right: 0; 
+  bottom: 0;
+  margin: auto;  /* 有了这个就自动居中了 */
+}
+.pic_tou {
+  position: absolute;
+  left: 0; 
+  top: 0; 
+  right: 0; 
+  bottom: 0;
+  margin: auto;  /* 有了这个就自动居中了 */
+}
+.controller_info {
+  height: 100%;
+  width: 100%;
+  text-align: center;
+}
