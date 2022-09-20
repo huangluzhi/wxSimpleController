@@ -11,7 +11,6 @@ module.exports.len = function(arr) {
 <button bindtap="stopBluetoothDevicesDiscovery">停止扫描</button>
 <button bindtap="closeBluetoothAdapter">结束流程</button>
 <!-- <button bindtap="openBluetoothController">控制器</button> -->
-<button bindtap="openBluetoothController">控制器</button>
 <view style="text-align: center;" class="" wx:if="{{connecting}}">正在连接...</view>
 
 <view class="devices_summary">已发现 {{devices.length}} 个外围设备：</view>

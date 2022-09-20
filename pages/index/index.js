@@ -114,7 +114,7 @@ Page({
           deviceId,
         })
         this.getBLEDeviceServices(deviceId)
-        openBluetoothController()
+        this.openBluetoothController()
       }
     })
     this.stopBluetoothDevicesDiscovery()
