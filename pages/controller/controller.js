@@ -4,34 +4,70 @@ const util = require('../../utils/util.js')
 Page({
 
   data: {
+    intervalEvent: "",
     logs: [],
     StartX: '0',
     StartY: '0',
-    leftLooks: '',
-    topLooks: '',
+    CoorX: '0',
+    CoorY: '0',
+    CoorX_per: '0',
+    CoorY_per: '0',
     //半径
-    radius: '60',
-    angle: '',
+    radius: '110',
+    angle: '0',
     //posX:'',
     //posY:''
+    deviceId: '',
+    serviceId: '',
+    characteristicId: '',
 
   },
 
-  onLoad: function () {
-    var self = this;
+  onLoad: function (arg) {
+    let that=this 
+
     const query = wx.createSelectorQuery()
     query.select('.pic_tou').boundingClientRect(function(res){
-      self.data.StartX = res.left + res.width / 2; // #the-id 节点的上边界坐标（相对于显示区域） 
-      self.data.StartY = res.top + res.height / 2; // #the-id 节点的上边界坐标（相对于显示区域） 
-      // self.data.leftLooks = self.data.StartX
-      // self.data.topLooks = self.data.StartY
+      that.setData({
+        StartX: (res.left + res.width / 2).toFixed(0),
+        StartY: (res.top + res.height / 2).toFixed(0),
+        deviceId: arg._deviceId,
+        serviceId: arg._deviceId,
+        characteristicId: arg._characteristicId,
+      })
     })
     query.selectViewport().scrollOffset(function(res){
       res.scrollTop // 显示区域的竖直滚动位置
     })
     query.exec()
+    this.setData({ //给声明的变量interval赋值，每1000毫秒执行一次 
+      intervalEvent: setInterval(() => { that.writeLoop() }, 1000) 
+    }) 
   },
 
+  onUnload() { 
+    //页面销毁停止运行 
+    let that = this 
+    clearInterval(that.data.intervalEvent) 
+  },
+
+  writeLoop() {
+    console.log('writeloop func run')
+    this.writeBLECharacteristicValue()
+  },
+
+  writeBLECharacteristicValue() {
+    // 向蓝牙设备发送一个0x00的16进制数据
+    let buffer = new ArrayBuffer(1)
+    let dataView = new DataView(buffer)
+    dataView.setUint8(0, Math.random() * 255 | 0)
+    wx.writeBLECharacteristicValue({
+      deviceId: this.data.deviceId,
+      serviceId: this.data.serviceId,
+      characteristicId: this.data.characteristicId,
+      value: buffer,
+    })
+  },
 
   //摇杆点击事件
   ImageTouch: function (e) {
@@ -40,54 +76,57 @@ Page({
 
   //拖动摇杆移动
   ImageTouchMove: function (e) {
-    var self = this;
+    
     //e.touches[0].clientX是触碰的位置，需要减40使得图片中心跟随触碰位置
     var touchX = e.touches[0].clientX;
     var touchY = e.touches[0].clientY;
-    var movePos = self.GetPosition(touchX, touchY);
+    var movePos = this.GetPosition(touchX, touchY);
     //console.log("接触坐标：(" + touchX + "," + touchY + ")");
     // console.log("图片坐标：("+movePos.posX + "," + movePos.posY+")");
     
-    self.setData({
-      // leftLooks: movePos.posX,
-      // topLooks: movePos.posY
-      leftLooks: movePos.posX,
-      topLooks: movePos.posY
+    this.setData({
+      CoorX: movePos.posX,
+      CoorY: movePos.posY,
+      CoorX_per: (movePos.posX/this.data.radius*100).toFixed(0),
+      CoorY_per: -(movePos.posY/this.data.radius*100).toFixed(0)
     })
+    this.writeBLECharacteristicValue()
   },
 
   //松开摇杆复原
   ImageReturn: function (e) {
-    var self = this;
-    self.setData({
-      // leftLooks: self.data.StartX,
-      // topLooks: self.data.StartY,
-      leftLooks: '',
-      topLooks: '',
-      angle: ""
+    
+    this.setData({
+      // CoorX: this.data.StartX,
+      // CoorY: this.data.StartY,
+      CoorX: '0',
+      CoorY: '0',
+      CoorX_per: '0',
+      CoorY_per: '0',
+      angle: "0"
     })
   },
 
   //获得触碰位置并且进行数据处理获得触碰位置与拖动范围的交点位置
   GetPosition: function (touchX, touchY) {
-    var self = this;
-    var DValue_X;
+    
+    var Dvalue_X;
     var Dvalue_Y;
     var Dvalue_Z;
     var imageX;
     var imageY;
     var ratio;
-    // DValue_X = touchX - self.data.StartX;
-    // Dvalue_Y = touchY - self.data.StartY;
-    DValue_X = touchX - self.data.StartX;
-    Dvalue_Y = touchY - self.data.StartY;
-    Dvalue_Z = Math.sqrt(DValue_X * DValue_X + Dvalue_Y * Dvalue_Y);
-    self.GetAngle(DValue_X, Dvalue_Y)
+    // Dvalue_X = touchX - this.data.StartX;
+    // Dvalue_Y = touchY - this.data.StartY;
+    Dvalue_X = touchX - this.data.StartX;
+    Dvalue_Y = touchY - this.data.StartY;
+    Dvalue_Z = Math.sqrt(Dvalue_X * Dvalue_X + Dvalue_Y * Dvalue_Y);
+    this.GetAngle(Dvalue_X, Dvalue_Y)
     //触碰点在范围内
-    if (Dvalue_Z <= self.data.radius) {
+    if (Dvalue_Z <= this.data.radius) {
       // imageX = touchX;
       // imageY = touchY;
-      imageX = DValue_X;
+      imageX = Dvalue_X;
       imageY = Dvalue_Y;
       imageX = Math.round(imageX);
       imageY = Math.round(imageY);
@@ -97,8 +136,8 @@ Page({
     //触碰点在范围外
     else {
 
-      ratio = self.data.radius / Dvalue_Z;
-      imageX = DValue_X * ratio;
+      ratio = this.data.radius / Dvalue_Z;
+      imageX = Dvalue_X * ratio;
       imageY = Dvalue_Y * ratio;
       imageX = Math.round(imageX);
       imageY = Math.round(imageY);
@@ -108,15 +147,24 @@ Page({
   },
 
   //获取角度
-  GetAngle: function (DValue_Y, Dvalue_X) {
-    var self = this;
-    if (DValue_Y != 0) {
-      var angleTan = Dvalue_X / DValue_Y;
+  GetAngle: function (Dvalue_X, Dvalue_Y) {
+    
+    if (Dvalue_Y != 0) {
+      var angleTan = Dvalue_X / Dvalue_Y;
+    // if (Dvalue_Y != 0) {
+    // if (Dvalue_X != 0) {
+    //   var angleTan = Dvalue_Y / Dvalue_X;
       var ang = Math.atan(angleTan);
 
       var angs = ang * 180 / 3.14;
+      if (Dvalue_X >= 0 && Dvalue_Y >= 0) {
+        angs = -180 + angs
+      }
+      if (Dvalue_X <= 0 && Dvalue_Y >= 0) {
+        angs = 180 + angs
+      }
       var result = Math.round(angs);
-      self.setData({
+      this.setData({
         angle: result
       })
     }

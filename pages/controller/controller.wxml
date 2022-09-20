@@ -1,10 +1,10 @@
 
-<view class="controller_info">({{StartX}},{{StartY}})</view>
-<view class="controller_info">({{leftLooks}},{{topLooks}})</view>
-<view class="controller_info">({{angle}})</view>
+<view class="controller_info">摇杆中心({{StartX}},{{StartY}})</view>
+<view class="controller_info">当前位置({{CoorX_per}},{{CoorY_per}})</view>
+<view class="controller_info">摇杆角度({{angle}})</view>
 <view class="relative">
   <!-- 背景图片 -->
-  <image style="width: 100px; height: 100px;" class="pic_background" src="../../controller_background.png"></image>
+  <image style="width: 150px; height: 150px;" class="pic_background" src="../../controller_background.png"></image>
   <!-- 摇杆图片 -->
-  <image style="width: 80px; height: 80px;left:{{leftLooks}}px;top:{{topLooks}}px;" bindtouchend='ImageReturn' bindtouchmove='ImageTouchMove' class="pic_tou" src="../../controller_stick.png " bindtap="ImageTouch"></image>
+  <image style="width: 70px; height: 70px;left:{{CoorX}}px;top:{{CoorY}}px;" bindtouchend='ImageReturn' bindtouchmove='ImageTouchMove' class="pic_tou" src="../../controller_stick.png " bindtap="ImageTouch"></image>
 </view>

@@ -24,11 +24,13 @@ Page({
   data: {
     devices: [],
     connected: false,
+    connecting: false,
     chs: [],
   },
   openBluetoothController() {
     wx.navigateTo({
-      url: '../controller/controller',
+      url: '../controller/controller?_deviceId=' + this._deviceId + '&_characteristicId=' + this._characteristicId,
+      // url: '../controller/controller?_deviceId=df&_characteristicId=sdf',
     })
   },  
   openBluetoothAdapter() {
@@ -99,15 +101,20 @@ Page({
     const ds = e.currentTarget.dataset
     const deviceId = ds.deviceId
     const name = ds.name
+    this.setData({
+      connecting: true,
+    })
     wx.createBLEConnection({
       deviceId,
       success: (res) => {
         this.setData({
           connected: true,
+          connecting: false,
           name,
           deviceId,
         })
         this.getBLEDeviceServices(deviceId)
+        openBluetoothController()
       }
     })
     this.stopBluetoothDevicesDiscovery()
