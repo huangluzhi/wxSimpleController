@@ -28,12 +28,20 @@ Page({
 
     const query = wx.createSelectorQuery()
     query.select('.pic_tou').boundingClientRect(function(res){
+      util.wxBLE.setData({
+        deviceId: arg._deviceId,
+        serviceId: arg._serviceId,
+        characteristicId: arg._characteristicId,
+      })
       that.setData({
         StartX: (res.left + res.width / 2).toFixed(0),
         StartY: (res.top + res.height / 2).toFixed(0),
-        deviceId: arg._deviceId,
-        serviceId: arg._deviceId,
-        characteristicId: arg._characteristicId,
+        deviceId: util.wxBLE.data.deviceId,
+        serviceId: util.wxBLE.data.serviceId,
+        characteristicId: util.wxBLE.data.characteristicId,
+        // deviceId: arg._deviceId,
+        // serviceId: arg._serviceId,
+        // characteristicId: arg._characteristicId,
       })
     })
     query.selectViewport().scrollOffset(function(res){
@@ -53,21 +61,22 @@ Page({
 
   writeLoop() {
     console.log('writeloop func run')
-    this.writeBLECharacteristicValue()
+    // this.writeBLECharacteristicValue()
+    util.wxBLE.writeBLECharacteristicValue('test')
   },
 
-  writeBLECharacteristicValue() {
-    // 向蓝牙设备发送一个0x00的16进制数据
-    let buffer = new ArrayBuffer(1)
-    let dataView = new DataView(buffer)
-    dataView.setUint8(0, Math.random() * 255 | 0)
-    wx.writeBLECharacteristicValue({
-      deviceId: this.data.deviceId,
-      serviceId: this.data.serviceId,
-      characteristicId: this.data.characteristicId,
-      value: buffer,
-    })
-  },
+  // writeBLECharacteristicValue() {
+  //   // 向蓝牙设备发送一个0x00的16进制数据
+  //   let buffer = new ArrayBuffer(1)
+  //   let dataView = new DataView(buffer)
+  //   dataView.setUint8(0, Math.random() * 255 | 0)
+  //   wx.writeBLECharacteristicValue({
+  //     deviceId: this.data.deviceId,
+  //     serviceId: this.data.serviceId,
+  //     characteristicId: this.data.characteristicId,
+  //     value: buffer,
+  //   })
+  // },
 
   //摇杆点击事件
   ImageTouch: function (e) {
@@ -90,7 +99,8 @@ Page({
       CoorX_per: (movePos.posX/this.data.radius*100).toFixed(0),
       CoorY_per: -(movePos.posY/this.data.radius*100).toFixed(0)
     })
-    this.writeBLECharacteristicValue()
+    // this.writeBLECharacteristicValue()
+    util.wxBLE.writeBLECharacteristicValue('test')
   },
 
   //松开摇杆复原

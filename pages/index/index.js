@@ -26,13 +26,18 @@ Page({
     connected: false,
     connecting: false,
     chs: [],
+    // writechs: 
   },
   openBluetoothController() {
+    if (!this.data.canWrite) {
+      return;
+    }
+    let that = this
     wx.navigateTo({
-      url: '../controller/controller?_deviceId=' + this._deviceId + '&_characteristicId=' + this._characteristicId,
+      url: '../controller/controller?_deviceId=' + that._deviceId + '&_serviceId=' + that._serviceId + '&_characteristicId=' + that._characteristicId,
       // url: '../controller/controller?_deviceId=df&_characteristicId=sdf',
     })
-  },  
+  },
   openBluetoothAdapter() {
     wx.openBluetoothAdapter({
       success: (res) => {
@@ -164,7 +169,7 @@ Page({
             this._deviceId = deviceId
             this._serviceId = serviceId
             this._characteristicId = item.uuid
-            this.writeBLECharacteristicValue()
+            this.writeBLECharacteristicValue('test')
           }
           if (item.properties.notify || item.properties.indicate) {
             wx.notifyBLECharacteristicValueChange({
@@ -202,16 +207,36 @@ Page({
       this.setData(data)
     })
   },
-  writeBLECharacteristicValue() {
+  writeBLECharacteristicValue(msgSend) {
     // 向蓝牙设备发送一个0x00的16进制数据
-    let buffer = new ArrayBuffer(1)
+    // let buffer = new ArrayBuffer(1)
+    // let dataView = new DataView(buffer)
+    // dataView.setUint8(0, Math.random() * 255 | 0)
+    // wx.writeBLECharacteristicValue({
+    //   deviceId: this._deviceId,
+    //   serviceId: this._deviceId,
+    //   characteristicId: this._characteristicId,
+    //   value: buffer,
+    // })
+    let data = {
+      latitude: "22.761592",
+      longitude: "112.978089"
+    }
+    var buffer = stringToBytes(msgSend)
+    console.log("发送数据：", buffer)
     let dataView = new DataView(buffer)
     dataView.setUint8(0, Math.random() * 255 | 0)
+    console.log("发送服务码：" + this._characteristicId)
     wx.writeBLECharacteristicValue({
       deviceId: this._deviceId,
-      serviceId: this._deviceId,
+      serviceId: this._serviceId,
       characteristicId: this._characteristicId,
       value: buffer,
+      complete: res => {
+        this.setData({
+          shuju: res
+        })
+      }
     })
   },
   closeBluetoothAdapter() {
@@ -219,3 +244,13 @@ Page({
     this._discoveryStarted = false
   },
 })
+
+// 字符串转byte
+function stringToBytes(str) {
+  var array = new Uint8Array(str.length);
+  for (var i = 0, l = str.length; i < l; i++) {
+    array[i] = str.charCodeAt(i);
+  }
+  console.log(array);
+  return array.buffer;
+}

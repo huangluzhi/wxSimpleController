@@ -2,6 +2,10 @@
 <view class="controller_info">摇杆中心({{StartX}},{{StartY}})</view>
 <view class="controller_info">当前位置({{CoorX_per}},{{CoorY_per}})</view>
 <view class="controller_info">摇杆角度({{angle}})</view>
+
+<view class="controller_info">deviceId({{deviceId}})</view>
+<view class="controller_info">serviceId({{serviceId}})</view>
+<view class="controller_info">characteristicId({{characteristicId}})</view>
 <view class="relative">
   <!-- 背景图片 -->
   <image style="width: 150px; height: 150px;" class="pic_background" src="../../controller_background.png"></image>
