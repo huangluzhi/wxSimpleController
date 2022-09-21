@@ -23,21 +23,21 @@ const wxBLE = {
     _serviceId: '',
     _characteristicId: '',
   },
-  writeBLECharacteristicValue: msgSend => {
+  writeBLECharacteristicValue: function (msgSend) {
     var buffer = stringToBytes(msgSend)
     console.log("发送数据：", buffer)
     let dataView = new DataView(buffer)
     dataView.setUint8(0, Math.random() * 255 | 0)
-    console.log("发送服务码：" +  this.wxBLE.data._characteristicId)
+    console.log("发送chsID：" +  this.data._characteristicId)
     wx.writeBLECharacteristicValue({
-      deviceId: this.wxBLE.data._deviceId,
-      serviceId: this.wxBLE.data._serviceId,
-      characteristicId: this.wxBLE.data._characteristicId,
+      deviceId: this.data._deviceId,
+      serviceId: this.data._serviceId,
+      characteristicId: this.data._characteristicId,
       value: buffer,
       complete: res => {
-        this.wxBLE.data.setData({
-          shuju: res
-        })
+        // this.setData({
+        //   shuju: res
+        // })
       }
     })
   }

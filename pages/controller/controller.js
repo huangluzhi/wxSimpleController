@@ -28,11 +28,9 @@ Page({
 
     const query = wx.createSelectorQuery()
     query.select('.pic_tou').boundingClientRect(function(res){
-      util.wxBLE.setData({
-        deviceId: arg._deviceId,
-        serviceId: arg._serviceId,
-        characteristicId: arg._characteristicId,
-      })
+      util.wxBLE.data.deviceId = arg._deviceId,
+      util.wxBLE.data.serviceId = arg._serviceId,
+      util.wxBLE.data.characteristicId = arg._characteristicId,
       that.setData({
         StartX: (res.left + res.width / 2).toFixed(0),
         StartY: (res.top + res.height / 2).toFixed(0),
