@@ -139,7 +139,8 @@ Page({
       deviceId,
       success: (res) => {
         for (let i = 0; i < res.services.length; i++) {
-          if (res.services[i].isPrimary) {
+          console.log(res.services[i].uuid)
+          if (res.services[i].uuid == '0000FFE0-0000-1000-8000-00805F9B34FB') {
             this.getBLEDeviceCharacteristics(deviceId, res.services[i].uuid)
             return
           }
@@ -169,7 +170,7 @@ Page({
             this._deviceId = deviceId
             this._serviceId = serviceId
             this._characteristicId = item.uuid
-            this.writeBLECharacteristicValue('test')
+            this.writeBLECharacteristicValue('handshake successfully')
           }
           if (item.properties.notify || item.properties.indicate) {
             wx.notifyBLECharacteristicValueChange({

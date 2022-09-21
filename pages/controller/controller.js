@@ -20,7 +20,15 @@ Page({
     deviceId: '',
     serviceId: '',
     characteristicId: '',
-
+  },
+  
+  bleData: {
+    speed: '',
+    turn: '',
+    blc_kp: '',
+    blc_kd: '',
+    spd_kp: '',
+    spd_ki: '',
   },
 
   onLoad: function (arg) {
@@ -29,14 +37,14 @@ Page({
     const query = wx.createSelectorQuery()
     query.select('.pic_tou').boundingClientRect(function(res){
       util.wxBLE.data.deviceId = arg._deviceId,
-      util.wxBLE.data.serviceId = arg._serviceId,
-      util.wxBLE.data.characteristicId = arg._characteristicId,
+      util.wxBLE.data.writer.serviceId = arg._serviceId,
+      util.wxBLE.data.writer.characteristicId = arg._characteristicId,
       that.setData({
         StartX: (res.left + res.width / 2).toFixed(0),
         StartY: (res.top + res.height / 2).toFixed(0),
         deviceId: util.wxBLE.data.deviceId,
-        serviceId: util.wxBLE.data.serviceId,
-        characteristicId: util.wxBLE.data.characteristicId,
+        serviceId: util.wxBLE.data.writer.serviceId,
+        characteristicId: util.wxBLE.data.writer.characteristicId,
         // deviceId: arg._deviceId,
         // serviceId: arg._serviceId,
         // characteristicId: arg._characteristicId,
@@ -47,7 +55,7 @@ Page({
     })
     query.exec()
     this.setData({ //给声明的变量interval赋值，每1000毫秒执行一次 
-      intervalEvent: setInterval(() => { that.writeLoop() }, 1000) 
+      intervalEvent: setInterval(() => { that.writeLoop() }, 500) 
     }) 
   },
 
@@ -60,7 +68,14 @@ Page({
   writeLoop() {
     console.log('writeloop func run')
     // this.writeBLECharacteristicValue()
-    util.wxBLE.writeBLECharacteristicValue('test')
+    this.bleData.speed = this.data.CoorX_per;
+    this.bleData.turn = this.data.CoorY_per;
+    this.bleData.blc_kp = this.data.CoorY_per;
+    this.bleData.blc_kd = this.data.CoorY_per;
+    this.bleData.spd_kp = this.data.CoorY_per;
+    this.bleData.spd_ki = this.data.CoorY_per;
+    var bleData_str = JSON.stringify(this.bleData);
+    util.wxBLE.writeBLECharacteristicValue(bleData_str)
   },
 
   // writeBLECharacteristicValue() {
@@ -98,7 +113,6 @@ Page({
       CoorY_per: -(movePos.posY/this.data.radius*100).toFixed(0)
     })
     // this.writeBLECharacteristicValue()
-    util.wxBLE.writeBLECharacteristicValue('test')
   },
 
   //松开摇杆复原

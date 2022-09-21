@@ -22,17 +22,27 @@ const wxBLE = {
     _deviceId: '',
     _serviceId: '',
     _characteristicId: '',
+    // canWrite: false,
+    writer: {
+      deviceId: '',
+      serviceId: '',
+      characteristicId: '',
+    }
   },
   writeBLECharacteristicValue: function (msgSend) {
-    var buffer = stringToBytes(msgSend)
-    console.log("发送数据：", buffer)
+    var msgLen = msgSend.length
+    var msgLenBuffer = new ArrayBuffer(4);
+    new DataView(msgLenBuffer).setUint32(0, msgLen)
+    var buffer = stringToBytes(String.fromCharCode(233) + String.fromCharCode.apply(null, new Uint8Array(msgLenBuffer) ) + msgSend)
+
+    // console.log("发送数据：", buffer)
     let dataView = new DataView(buffer)
-    dataView.setUint8(0, Math.random() * 255 | 0)
-    console.log("发送chsID：" +  this.data._characteristicId)
+    // dataView.setUint8(0, Math.random() * 255 | 0)
+    // console.log("发送chsID：" +  this.data.writer.characteristicId)
     wx.writeBLECharacteristicValue({
-      deviceId: this.data._deviceId,
-      serviceId: this.data._serviceId,
-      characteristicId: this.data._characteristicId,
+      deviceId: this.data.deviceId,
+      serviceId: this.data.writer.serviceId,
+      characteristicId: this.data.writer.characteristicId,
       value: buffer,
       complete: res => {
         // this.setData({
@@ -54,6 +64,5 @@ function stringToBytes(str) {
   for (var i = 0, l = str.length; i < l; i++) {
     array[i] = str.charCodeAt(i);
   }
-  console.log(array);
   return array.buffer;
 }
