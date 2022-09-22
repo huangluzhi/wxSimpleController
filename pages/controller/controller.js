@@ -20,15 +20,19 @@ Page({
     deviceId: '',
     serviceId: '',
     characteristicId: '',
+    balkp: '',
+    balkd: '',
+    spdkp: '',
+    spdki: '',
   },
   
   bleData: {
     speed: '',
     turn: '',
-    blc_kp: '',
-    blc_kd: '',
-    spd_kp: '',
-    spd_ki: '',
+    balkp: '',
+    balkd: '',
+    spdkp: '',
+    spdki: '',
   },
 
   onLoad: function (arg) {
@@ -70,10 +74,10 @@ Page({
     // this.writeBLECharacteristicValue()
     this.bleData.speed = this.data.CoorX_per;
     this.bleData.turn = this.data.CoorY_per;
-    this.bleData.blc_kp = this.data.CoorY_per;
-    this.bleData.blc_kd = this.data.CoorY_per;
-    this.bleData.spd_kp = this.data.CoorY_per;
-    this.bleData.spd_ki = this.data.CoorY_per;
+    this.bleData.balkp = this.data.balkp;
+    this.bleData.balkd = this.data.balkd;
+    this.bleData.spdkp = this.data.spdkp;
+    this.bleData.spdki = this.data.spdki;
     var bleData_str = JSON.stringify(this.bleData);
     util.wxBLE.writeBLECharacteristicValue(bleData_str)
   },
@@ -104,7 +108,8 @@ Page({
       CoorX: movePos.posX,
       CoorY: movePos.posY,
       CoorX_per: (movePos.posX/this.data.radius*100).toFixed(0),
-      CoorY_per: -(movePos.posY/this.data.radius*100).toFixed(0)
+      // CoorY_per: -(movePos.posY/this.data.radius*100).toFixed(0)
+      CoorY_per: (movePos.posY/this.data.radius*100).toFixed(0)
     })
     // this.writeBLECharacteristicValue()
   },

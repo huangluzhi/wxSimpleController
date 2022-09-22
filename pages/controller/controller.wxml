@@ -11,13 +11,25 @@
     <view class="weui-cells__title">直立环kp</view>
     <view class="weui-cells weui-cells_after-title">
       <view class="weui-cell weui-cell_input">
-        <input class="weui-input" data-param="spd_kp" maxlength="5" bindinput="bindKeyInput" type="digit" placeholder="kp"/>
+        <input class="weui-input" data-param="balkp" maxlength="5" bindinput="bindKeyInput" type="digit" placeholder="kp"/>
       </view>
     </view>
     <view class="weui-cells__title">直立环ki</view>
     <view class="weui-cells weui-cells_after-title">
       <view class="weui-cell weui-cell_input">
-        <input class="weui-input" data-param="spd_ki" maxlength="5" bindinput="bindKeyInput" type="digit" placeholder="ki"/>
+        <input class="weui-input" data-param="balkd" maxlength="5" bindinput="bindKeyInput" type="digit" placeholder="ki"/>
+      </view>
+    </view>
+    <view class="weui-cells__title">速度环kp</view>
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell weui-cell_input">
+        <input class="weui-input" data-param="spdkp" maxlength="5" bindinput="bindKeyInput" type="digit" placeholder="kp"/>
+      </view>
+    </view>
+    <view class="weui-cells__title">速度环ki</view>
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell weui-cell_input">
+        <input class="weui-input" data-param="spdki" maxlength="5" bindinput="bindKeyInput" type="digit" placeholder="ki"/>
       </view>
     </view>
   </view>
