@@ -1,4 +1,3 @@
-
 <view class="controller_info">摇杆中心({{StartX}},{{StartY}})</view>
 <view class="controller_info">当前位置({{CoorX_per}},{{CoorY_per}})</view>
 <view class="controller_info">摇杆角度({{angle}})</view>
@@ -6,6 +5,30 @@
 <view class="controller_info">deviceId({{deviceId}})</view>
 <view class="controller_info">serviceId({{serviceId}})</view>
 <view class="controller_info">characteristicId({{characteristicId}})</view>
+
+<view class="page-body">
+  <view class="page-section">
+    <view class="weui-cells__title">直立环kp</view>
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell weui-cell_input">
+        <input class="weui-input" data-param="spd_kp" maxlength="5" bindinput="bindKeyInput" type="digit" placeholder="kp"/>
+      </view>
+    </view>
+    <view class="weui-cells__title">直立环ki</view>
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell weui-cell_input">
+        <input class="weui-input" data-param="spd_ki" maxlength="5" bindinput="bindKeyInput" type="digit" placeholder="ki"/>
+      </view>
+    </view>
+  </view>
+  <!-- <view class="section section_gap">
+    <text class="section__title">设置最小/最大值</text>
+    <view class="body-view">
+      <slider bindchange="slider4change" step="5" min="50" max="200" show-value />
+    </view>
+  </view> -->
+</view>
+
 <view class="relative">
   <!-- 背景图片 -->
   <image style="width: 150px; height: 150px;" class="pic_background" src="../../controller_background.png"></image>

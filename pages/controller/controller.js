@@ -77,20 +77,14 @@ Page({
     var bleData_str = JSON.stringify(this.bleData);
     util.wxBLE.writeBLECharacteristicValue(bleData_str)
   },
-
-  // writeBLECharacteristicValue() {
-  //   // 向蓝牙设备发送一个0x00的16进制数据
-  //   let buffer = new ArrayBuffer(1)
-  //   let dataView = new DataView(buffer)
-  //   dataView.setUint8(0, Math.random() * 255 | 0)
-  //   wx.writeBLECharacteristicValue({
-  //     deviceId: this.data.deviceId,
-  //     serviceId: this.data.serviceId,
-  //     characteristicId: this.data.characteristicId,
-  //     value: buffer,
-  //   })
-  // },
-
+  
+  bindKeyInput: function (e) {
+    this.data[`${e.currentTarget.dataset.param}`] = e.detail.value
+    // this.setData({
+    //   [`${e.currentTarget.dataset.param}`]: e.detail.value
+    // })
+  },
+  
   //摇杆点击事件
   ImageTouch: function (e) {
     console.log("点击")
